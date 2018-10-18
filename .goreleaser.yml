@@ -23,3 +23,5 @@ brew:
     owner: springload
     name: homebrew-tools
   folder: Formula
+  homepage: "https://github.com/springload/lp-aws-saml"
+  description: "Temporary Credentials for AWS CLI for LastPass SAML login"
