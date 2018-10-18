@@ -1,0 +1,5 @@
+username = "email@example.com"
+saml_config_id = "12345"
+profile_name = "default"
+duration = 7200
+quiet = true

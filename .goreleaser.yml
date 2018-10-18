@@ -1,0 +1,25 @@
+# .goreleaser.yml
+builds:
+  - binary: lp-aws-saml
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+nfpm:
+  vendor: Springload
+  homepage: https://springload.co.nz
+
+  maintainer: DevOps team
+  description: Temporary Credentials for AWS CLI for LastPass SAML login
+  license: Apache 2.0
+  formats:
+    - deb
+    - rpm
+brew:
+  name: lp-aws-saml
+  github:
+    owner: springload
+    name: homebrew-tools
+  folder: Formula
