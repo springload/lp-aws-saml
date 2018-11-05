@@ -52,4 +52,9 @@ aws_session_token     = {YOUR_SESSION_TOKEN}
 
 ### Installation
 
+For macOS you can install with brew:
+```sh
+brew install springload/tools/lp-aws-saml
+```
+
 There are `deb` and `rpm` packages and binaries for those who don't use packages. Just head up to the [releases](https://github.com/springload/lp-aws-saml/releases/latest) page.
