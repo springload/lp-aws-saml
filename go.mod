@@ -1,0 +1,30 @@
+module github.com/springload/lp-aws-saml
+
+require (
+	github.com/antchfx/xmlquery v0.0.0-20180925013719-07935b1c0f2e
+	github.com/antchfx/xpath v0.0.0-20180922041825-3de91f3991a1
+	github.com/aws/aws-sdk-go v1.15.57
+	github.com/fsnotify/fsnotify v1.4.7
+	github.com/go-ini/ini v1.39.0
+	github.com/hashicorp/hcl v1.0.0
+	github.com/inconshreveable/mousetrap v1.0.0
+	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8
+	github.com/juju/go4 v0.0.0-20160222163258-40d72ab9641a
+	github.com/magiconair/properties v1.8.0
+	github.com/mitchellh/mapstructure v1.1.2
+	github.com/pelletier/go-toml v1.2.0
+	github.com/spf13/afero v1.1.2
+	github.com/spf13/cast v1.2.0
+	github.com/spf13/cobra v0.0.3
+	github.com/spf13/jwalterweatherman v1.0.0
+	github.com/spf13/pflag v1.0.3
+	github.com/spf13/viper v1.2.1
+	github.com/vinhjaxt/persistent-cookiejar v0.0.0-20180709060329-9ac0896f6195
+	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
+	golang.org/x/net v0.0.0-20181017193950-04a2e542c03f
+	golang.org/x/sys v0.0.0-20181011152604-fa43e7bc11ba
+	golang.org/x/text v0.3.0
+	gopkg.in/errgo.v1 v1.0.0
+	gopkg.in/retry.v1 v1.0.2
+	gopkg.in/yaml.v2 v2.2.1
+)
