@@ -42,7 +42,7 @@ var rootCmd = &cobra.Command{
 		for {
 			assertion, err = lastpassaws.SamlToken(session, username, samlConfigID)
 			if err != nil {
-				log.Fatal("Can't get the saml: %s", err)
+				log.Fatalf("Can't get the saml: %s", err)
 			}
 			if assertion != "" {
 				break
