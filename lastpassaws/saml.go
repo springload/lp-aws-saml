@@ -1,9 +1,9 @@
 package lastpassaws
 
 import (
-	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 
@@ -17,16 +17,18 @@ func SamlToken(session *http.Client, username, samlConfigID string) (string, err
 
 	resp, err := session.Get(idpLoginPath)
 	if err != nil {
-		fmt.Print("Err", err)
 		return "", err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("Wrong status code from /saml/launch/cfg: %s", resp.Status)
+	}
 
 	action, fields := extractForm(resp.Body)
 
 	if action == "" {
 		// Error with account
-		return "", errors.New("Not logged into LastPass")
+		return "", nil
 	}
 
 	return fields["SAMLResponse"], nil
@@ -54,7 +56,7 @@ func PromptForRole(roles [][]string) []string {
 		return roles[0]
 	}
 
-	fmt.Println("Select a Role:")
+	log.Println("Select a Role:")
 	for i, role := range roles {
 		fmt.Println("  " + fmt.Sprint(i+1) + ") " + role[0])
 	}

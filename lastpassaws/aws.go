@@ -2,7 +2,7 @@ package lastpassaws
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -26,7 +26,7 @@ func AssumeAWSRole(assertion, roleArn, principalArn string, duration int) (*sts.
 	sts := sts.New(sess)
 	resp, err := sts.AssumeRoleWithSAML(&input)
 	if err != nil {
-		fmt.Println("Error assuming role: ", err)
+		log.Println("Error assuming role: ", err)
 		return nil, err
 	}
 	return resp, nil
@@ -37,8 +37,7 @@ func SetAWSProfile(profileName string, response *sts.AssumeRoleWithSAMLOutput) {
 	filename := fmt.Sprintf("%s/.aws/credentials", HomeDir())
 	cfg, err := ini.Load(filename)
 	if err != nil {
-		fmt.Printf("Fail to read file: %v", err)
-		os.Exit(1)
+		log.Fatalf("Fail to read file: %v", err)
 	}
 
 	sec := cfg.Section(profileName)

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"syscall"
@@ -9,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/springload/lp-aws-saml/lastpassaws"
-	"github.com/vinhjaxt/persistent-cookiejar"
+	cookiejar "github.com/vinhjaxt/persistent-cookiejar"
 	"golang.org/x/crypto/ssh/terminal"
 )
 
@@ -24,7 +25,7 @@ var rootCmd = &cobra.Command{
 
 		username := viper.GetString("username")
 		if !quiet {
-			fmt.Println("Logging in with: ", username)
+			log.Println("Logging in with: ", username)
 		}
 
 		options := cookiejar.Options{
@@ -35,10 +36,19 @@ var rootCmd = &cobra.Command{
 			Jar: jar,
 		}
 
+		var assertion string
+		var err error
 		// Attempt to use stored cookies
-		assertion, err := lastpassaws.SamlToken(session, username, samlConfigID)
+		for {
+			assertion, err = lastpassaws.SamlToken(session, username, samlConfigID)
+			if err != nil {
+				log.Fatal("Can't get the saml: %s", err)
+			}
+			if assertion != "" {
+				break
+			}
+			log.Println("Don't have session, trying to log in")
 
-		if err != nil {
 			fmt.Print("Password: ")
 			bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
 			fmt.Println()
@@ -49,20 +59,12 @@ var rootCmd = &cobra.Command{
 			password := string(bytePassword)
 			otp := string(byteOtp)
 
-			err := lastpassaws.Login(session, username, password, otp)
-			if err != nil {
-				fmt.Println("Invalid Credentials")
-				os.Exit(1)
-				return
+			if err := lastpassaws.Login(session, username, password, otp); err != nil {
+				log.Printf("Invalid Credentials: %s", err)
+			} else {
+				jar.Save()
 			}
 
-			jar.Save()
-			assertion, err = lastpassaws.SamlToken(session, username, samlConfigID)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-				return
-			}
 		}
 
 		roles := lastpassaws.SamlRoles(assertion)

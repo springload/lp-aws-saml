@@ -33,6 +33,10 @@ func Login(session *http.Client, username, password, otp string) error {
 		return err
 	}
 	defer resp.Body.Close()
+	// check the status code, because lastpass returns 500x quite often
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("Wrong status: %s", resp.Status)
+	}
 
 	_, err = ioutil.ReadAll(resp.Body)
 	return err
