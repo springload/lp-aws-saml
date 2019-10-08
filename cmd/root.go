@@ -49,10 +49,10 @@ var rootCmd = &cobra.Command{
 			}
 			log.Println("Don't have session, trying to log in")
 
-			fmt.Print("Password: ")
+			fmt.Print("Lastpass Password: ")
 			bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
 			fmt.Println()
-			fmt.Print("OTP: ")
+			fmt.Print("Lastpass OTP: ")
 			byteOtp, _ := terminal.ReadPassword(int(syscall.Stdin))
 			fmt.Println()
 
