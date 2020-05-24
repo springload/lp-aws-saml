@@ -15,12 +15,13 @@ import (
 	"golang.org/x/crypto/pbkdf2"
 )
 
-const lastPassServer = "https://lastpass.com"
+// LastPassServer points to the Lastpass Server
+const LastPassServer = "https://lastpass.com"
 
 func iterations(session *http.Client, username string) int {
 	iterations := 5000
 
-	lpIterationPage := lastPassServer + "/iterations.php"
+	lpIterationPage := LastPassServer + "/iterations.php"
 
 	params := url.Values{
 		"email": {username},

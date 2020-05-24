@@ -1,5 +1,7 @@
 module github.com/springload/lp-aws-saml
 
+go 1.14
+
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/antchfx/xmlquery v0.0.0-20180925013719-07935b1c0f2e

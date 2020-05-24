@@ -1,5 +1,11 @@
 username = "email@example.com"
+
+
 saml_config_id = "12345"
+###  OR  ###
+saml_identity_url = "https://identity.lastpass.com/redirect?id=12345678-1234-4321-1234-123456789012"
+
+
 profile_name = "default"
 duration = 7200
 quiet = true
