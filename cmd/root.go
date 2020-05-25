@@ -42,23 +42,26 @@ var rootCmd = &cobra.Command{
 		// Attempt to use stored cookies
 		for {
 			var samlURL string
+			attemptSaml := true
 			if samlIdentityURL != "" {
 				err = lastpassaws.GetLastpassIdentitySession(session)
 				if err != nil {
-					log.Fatalf("Cannot get Lastpass Identity: %s", err)
-					return
+					log.Printf("Cannot get Lastpass Identity: %s", err)
+					attemptSaml = false
 				}
 				samlURL = samlIdentityURL
 			} else {
 				samlURL = lastpassaws.LastPassServer + "/saml/launch/cfg/" + samlConfigID
 			}
 
-			assertion, err = lastpassaws.SamlToken(session, samlURL)
-			if err != nil {
-				log.Fatalf("Can't get the saml: %s", err)
-			}
-			if assertion != "" {
-				break
+			if attemptSaml {
+				assertion, err = lastpassaws.SamlToken(session, samlURL)
+				if err != nil {
+					log.Fatalf("Can't get the saml: %s", err)
+				}
+				if assertion != "" {
+					break
+				}
 			}
 
 			log.Println("Don't have session, trying to log in")

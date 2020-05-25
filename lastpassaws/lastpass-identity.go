@@ -20,7 +20,7 @@ func GetLastpassIdentitySession(session *http.Client) error {
 	action, fields := extractForm(resp.Body)
 	if action == "" {
 		// Error with account
-		return fmt.Errorf("Error with account")
+		return fmt.Errorf("Not logged in")
 	}
 
 	samlResponse := fields["SAMLResponse"]
