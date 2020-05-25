@@ -1,0 +1,24 @@
+name: Validate build of lp-aws-saml
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    name: build lp-aws-saml
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Unshallow to restore tags
+        run: git fetch --prune --unshallow
+      -
+        name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14.x
+
+      - run: go get
+      - run: go build
+      - run: ./lp-aws-saml -h
