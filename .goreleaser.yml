@@ -7,7 +7,7 @@ builds:
       - windows
     goarch:
       - amd64
-nfpm:
+nfpms:
   vendor: Springload
   homepage: https://springload.co.nz
 
@@ -17,7 +17,7 @@ nfpm:
   formats:
     - deb
     - rpm
-brew:
+brews:
   name: lp-aws-saml
   github:
     owner: springload
