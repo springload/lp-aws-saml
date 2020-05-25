@@ -12,10 +12,8 @@ import (
 )
 
 // SamlToken uses a LastPass login session to get a SAML token for assuming roles
-func SamlToken(session *http.Client, username, samlConfigID string) (string, error) {
-	idpLoginPath := lastPassServer + "/saml/launch/cfg/" + samlConfigID
-
-	resp, err := session.Get(idpLoginPath)
+func SamlToken(session *http.Client, samlURL string) (string, error) {
+	resp, err := session.Get(samlURL)
 	if err != nil {
 		return "", err
 	}

@@ -22,6 +22,7 @@ var rootCmd = &cobra.Command{
 
 		quiet := viper.GetBool("quiet")
 		samlConfigID := viper.GetString("saml_config_id")
+		samlIdentityURL := viper.GetString("saml_identity_url")
 
 		username := viper.GetString("username")
 		if !quiet {
@@ -40,13 +41,26 @@ var rootCmd = &cobra.Command{
 		var err error
 		// Attempt to use stored cookies
 		for {
-			assertion, err = lastpassaws.SamlToken(session, username, samlConfigID)
+			var samlURL string
+			if samlIdentityURL != "" {
+				err = lastpassaws.GetLastpassIdentitySession(session)
+				if err != nil {
+					log.Fatalf("Cannot get Lastpass Identity: %s", err)
+					return
+				}
+				samlURL = samlIdentityURL
+			} else {
+				samlURL = lastpassaws.LastPassServer + "/saml/launch/cfg/" + samlConfigID
+			}
+
+			assertion, err = lastpassaws.SamlToken(session, samlURL)
 			if err != nil {
 				log.Fatalf("Can't get the saml: %s", err)
 			}
 			if assertion != "" {
 				break
 			}
+
 			log.Println("Don't have session, trying to log in")
 
 			fmt.Print("Lastpass Password: ")
@@ -60,7 +74,8 @@ var rootCmd = &cobra.Command{
 			otp := string(byteOtp)
 
 			if err := lastpassaws.Login(session, username, password, otp); err != nil {
-				log.Printf("Invalid Credentials: %s", err)
+				log.Fatalf("Invalid Credentials: %s", err)
+				return
 			} else {
 				jar.Save()
 			}
@@ -69,7 +84,7 @@ var rootCmd = &cobra.Command{
 
 		roles := lastpassaws.SamlRoles(assertion)
 		if len(roles) == 0 {
-			fmt.Printf("No roles available for %s!\n", username)
+			log.Printf("No roles available for %s!\n", username)
 			os.Exit(1)
 			return
 		}
@@ -80,12 +95,13 @@ var rootCmd = &cobra.Command{
 
 		response, err := lastpassaws.AssumeAWSRole(assertion, role[0], role[1], duration)
 		if err != nil {
-			fmt.Println(err)
+			log.Fatalf("Cannot assume role: %s", err)
 			os.Exit(1)
 		}
 		lastpassaws.SetAWSProfile(profileName, response)
 
 		if !quiet {
+			fmt.Println()
 			fmt.Printf("A new AWS CLI profile '%s' has been added.\n", profileName)
 			fmt.Println("You may now invoke the aws CLI tool as follows:")
 			fmt.Println()

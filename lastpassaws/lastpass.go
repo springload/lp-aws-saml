@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // Login will submit the credentials to LastPass to login and create the
@@ -13,7 +14,7 @@ func Login(session *http.Client, username, password, otp string) error {
 
 	iterations := iterations(session, username)
 
-	lpLoginPage := lastPassServer + "/login.php"
+	lpLoginPage := LastPassServer + "/login.php"
 
 	params := url.Values{
 		"method":     {"web"},
@@ -38,6 +39,10 @@ func Login(session *http.Client, username, password, otp string) error {
 		return fmt.Errorf("Wrong status: %s", resp.Status)
 	}
 
-	_, err = ioutil.ReadAll(resp.Body)
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	body := string(bodyBytes)
+	if strings.Contains(body, "verifydevice") {
+		return fmt.Errorf("LastPass doesn't recognize this device or you're at a new location. Please check your email to grant access to your new device or location")
+	}
 	return err
 }
