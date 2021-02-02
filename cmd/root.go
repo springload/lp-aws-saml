@@ -69,7 +69,7 @@ var rootCmd = &cobra.Command{
 			fmt.Print("Lastpass Password: ")
 			bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
 			fmt.Println()
-			fmt.Print("Lastpass OTP: ")
+			fmt.Print("Lastpass 2FA: ")
 			byteOtp, _ := terminal.ReadPassword(int(syscall.Stdin))
 			fmt.Println()
 
